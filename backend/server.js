@@ -43,6 +43,11 @@ app.use(express.json());
 // Połączenie z MongoDB
 connectDB();
 
+// Root Route
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "OK", message: "TaskManager API is running successfully!" });
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
