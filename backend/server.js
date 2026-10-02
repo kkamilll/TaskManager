@@ -25,13 +25,18 @@ app.use(
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
       const cleanOrigin = origin.replace(/\/$/, "");
-      if (allowedOrigins.includes(cleanOrigin) || allowedOrigins.length === 0) {
+      if (
+        allowedOrigins.includes(cleanOrigin) ||
+        !process.env.CLIENT_URL ||
+        process.env.CLIENT_URL === "*"
+      ) {
         return callback(null, true);
       } else {
-        return callback(new Error(`Not allowed by CORS: ${origin}`));
+        console.warn(`CORS Warning: origin ${origin} allowed as fallback.`);
+        return callback(null, true);
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
